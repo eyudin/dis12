@@ -16,9 +16,10 @@
 #include "dis12.h"
 
 #define STATIC	static
-u_int	first = 65536, last = 0;
+u_int	first = 0xfffff, last = 0;
 char	*lp;
 
+STATIC int	get6h(void);
 STATIC int	get4h(void);
 STATIC int	get2h(void);
 STATIC int	get1h(void);
@@ -73,7 +74,7 @@ u_char	*srecfile(char *name)
 	char	buf[256];
 	u_char	*bbp;						/* bin buf ptr				*/
 	u_char	*bp;						/* pointer to binary		*/
-	int		lineno, s1addr, s1len, curloc;
+	int		lineno, sraddr, srlen, curloc;
 	FILE	*fp;
 
 	/* first figure out address range */
@@ -87,14 +88,27 @@ u_char	*srecfile(char *name)
 		if (0 == strncmp(buf, "S1", 2))
 			{
 			lp = buf + 2;
-			s1len = get2h() - 3;	/* less address and cs		*/
-			s1addr = get4h();
-			if (s1addr < first)
-				first = s1addr;
+			srlen = get2h() - 3;	/* less address and cs		*/
+			sraddr = get4h();
+			if (sraddr < first)
+				first = sraddr;
 
-			s1addr = s1addr + s1len - 1;
-			if (s1addr > last)
-				last = s1addr;
+			sraddr = sraddr + srlen - 1;
+			if (sraddr > last)
+				last = sraddr;
+			}
+		else if (0 == strncmp(buf, "S2", 2))
+			{
+			lp = buf + 2;
+			srlen = get2h() - 4;
+			sraddr = get6h();
+
+			if (sraddr < first)
+				first = sraddr;
+
+			sraddr = sraddr + srlen - 1;
+			if (sraddr > last)
+				last = sraddr;
 			}
 		}
 
@@ -119,40 +133,78 @@ u_char	*srecfile(char *name)
 		if (0 == strncmp(buf, "S1", 2))
 			{
 			lp = buf + 2;
-			s1len = get2h() - 3;
-			s1addr = get4h();
+			srlen = get2h() - 3;
+			sraddr = get4h();
 
-			if (s1addr < curloc)
-				exit (_errmsg(1, " out of range at %d (%04x)\n", lineno, s1addr));
+			if (sraddr < curloc)
+				exit (_errmsg(1, " out of range at %d (%04x)\n", lineno, sraddr));
 
-			if (s1addr != curloc)
+			if (sraddr != curloc)
 				{
-				add_class('x', curloc, s1addr - 1);
-				if (debug & 32) fprintf(dbgfp, "load_file: added x,%x,%x\n", curloc, s1addr - 1);
+				add_class('x', curloc, sraddr - 1);
+				if (debug & 32) fprintf(dbgfp, "load_file: added x,%x,%x\n", curloc, sraddr - 1);
 
-				curloc = s1addr;
+				curloc = sraddr;
 				bbp = bp - first + curloc;
 				}
 
-			while (s1len--)
+			while (srlen--)
 				{
 				*bbp++ = get2h();
 				++curloc;
 				}
 			}
 		else
+			if (0 == strncmp(buf, "S2", 2))
+				{
+				lp = buf + 2;
+				srlen = get2h() - 4;
+				sraddr = get6h();
+
+				if (sraddr < curloc)
+					exit (_errmsg(1, " out of range at %d (%04x)\n", lineno, sraddr));
+
+				if (sraddr != curloc)
+					{
+					add_class('x', curloc, sraddr - 1);
+					if (debug & 32) fprintf(dbgfp, "load_file: added x,%x,%x\n", curloc, sraddr - 1);
+
+					curloc = sraddr;
+					bbp = bp - first + curloc;
+					}
+
+				while (srlen--)
+					{
+					*bbp++ = get2h();
+					++curloc;
+					}
+				}
+		else
 			if (0 == strncmp(buf, "S9", 2))
 				{
 				lp = buf + 2;
-				s1len = get2h() - 3;
-				s1addr = get4h();
-				if ((s1addr < 65535) && (s1addr > 0))
-					xfer = s1addr;
+				srlen = get2h() - 3;
+				sraddr = get4h();
+				if ((sraddr < 65535) && (sraddr > 0))
+					xfer = sraddr;
 				}
 		}
 
 	fclose(fp);
 	return (bp);
+	}
+
+STATIC
+int		get6h(void)
+	{
+		int 	i, j, k;
+
+		i = get2h();
+		j = get2h();
+		k = get2h();
+
+		return (i << 16) + (j << 8) + k;
+
 	}
 
 
