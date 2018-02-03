@@ -29,8 +29,6 @@ u_char	*bbp;							/* working ptr to it		*/
 int		bbfsiz;							/* and it's size			*/
 int		behavior = 0x0077;
  
-char	*nada = ""; 
- 
 SymEnt	sym[SYMS];						/* the symbol table */ 
 int		symcnt = 0;						/* number of symbols used */ 
 
@@ -176,8 +174,8 @@ void	disasm(void)
 		gopc = opcode;			/* FIXME for debug in memtype */
 		nl = 0;
 		useful = 1;						/* assume success			*/
-		label = nada;
-		operand = nada;
+		label = "";
+		operand = "";
 		sprintf(hexdata = hexbuf, ";$%04X $%02X", opc_pc, opcode);
 
 		last_mt = mem_type;
@@ -232,7 +230,6 @@ void	disasm(void)
 				{
 				int		state = 0;
 
-				//hexdata = nada;
 				text = "fcc";
 				i = 0;
 				do	{
