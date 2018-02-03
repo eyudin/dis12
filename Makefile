@@ -19,10 +19,7 @@ code.o: code.c dis12.h dis12tbl.h
 loadfile.o: loadfile.c
 
 clean: 
-	rm -f *.o core
- 
-pritine: 
-	rm -f *.o core dis12
+	rm -f *.o dis12
  
 install: 
 	cp dis12 $(XDIR)/dis12 
