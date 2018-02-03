@@ -37,7 +37,7 @@ typedef struct {
 	} MemTyp;
 
 #define RANGES	1000					/* number of ranges allowed	*/
-
+
 /* 
  *	table entry for each opcode 
  */ 

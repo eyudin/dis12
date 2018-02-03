@@ -233,7 +233,7 @@ int		code(OpTblEnt *tb, int opcode)
 		}
 	return (tb->newlines);
 	}
-
+
 STATIC
 char	*immed1(char *buf, int flags)
 	{
@@ -284,7 +284,7 @@ char	*extended(char *buf, int flags)
 	return (buf);
 	}
 
-
+
 STATIC
 char	*indexed(char *buf, int flags)
 	{

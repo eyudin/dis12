@@ -54,7 +54,7 @@ int		htoi(char *);
 void	usage();
  
 extern u_char	*load_file(char *name);
-
+
 main(argc, argv, envp)
 int		argc;
 char	**argv;
@@ -123,7 +123,7 @@ if (debug) fprintf(dbgfp, "behavior = 0x%02x\n", behavior);
 	else
 		usage();
 	}
-
+
 /*
  * perform actions named file or stdin if name is 0
  */
@@ -155,7 +155,7 @@ void	process(char *name)
 	epilog();                                  /* "END" statement */
 	cleansym();
 	}
-
+
 int		opc_pc, gopc;
 
 void	disasm(void)
@@ -225,7 +225,7 @@ void	disasm(void)
 
 				nl = code(&dis12[0], opcode);
 				break;
-
+
 			case 't' :					/* text						*/
 				{
 				int		state = 0;
@@ -332,7 +332,7 @@ void	disasm(void)
 
 		} while (eoflg == 0);
 	}
-
+
 
 
 void	putline(int nl)
@@ -343,7 +343,7 @@ void	putline(int nl)
 
 	if (debug & 1) fflush(outfp);
 	}
-
+
 /*
  * memmory classes are a=addr, b=byte, c=code, t=text, w=word
  */
@@ -402,7 +402,7 @@ void	add_class(char type, int from, int to)
 	memtyp[i].from = from;
 	memtyp[i].to = to;
 	}
-
+
 
 
 int		find_type(int addr)
@@ -428,7 +428,7 @@ int		find_type(int addr)
 
 	return (type);
 	}
-
+
 
 void	load_syms(char *name)
 	{
@@ -550,7 +550,7 @@ void	epilog()
 	}
 
 
-
+
 /*
  * strsav - allocate space for a string and copy it there
  * die if error
@@ -584,7 +584,7 @@ u_char	get_byte(void)
 
 	return (byte);
 	}
-
+
 /*
  * Get a hex digit from 's' into 'x'.
  */

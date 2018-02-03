@@ -277,7 +277,7 @@ OpTblEnt dis12[] = {
 /* fe */	{EXT,	NADA,			0,	"ldx"},
 /* ff */	{EXT,	NADA,			0,	"lds"},
 			}; 
-
+
 /* pre byte 18 opcode table */
 OpTblEnt pag2[] = { 
 /* 00 */	{IMID,	NADA,			0,	"movw"},
