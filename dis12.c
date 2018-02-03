@@ -34,7 +34,7 @@ char	*nada = "";
 SymEnt	sym[SYMS];						/* the symbol table */ 
 int		symcnt = 0;						/* number of symbols used */ 
 
-MemTyp	memtyp[RANGES + 1] = {{'c', 0, 1}, {'c', 0x10000, 0x10000}};
+MemTyp	memtyp[RANGES + 1] = {{'c', 0, 1}, {'c', 0xfffff, 0xfffff}};
  
 void	process(char *);
 void	disasm(void);

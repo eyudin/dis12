@@ -29,7 +29,7 @@ typedef struct {
 #define	USED	1		/* entry used flag */ 
 #define	PRINT	2		/* label printed */ 
  
-#define	SYMS	2400		/* number of symbols (max) in table */ 
+#define	SYMS	4800		/* number of symbols (max) in table */ 
 
 /*
  * memory specifier structure
