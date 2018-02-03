@@ -67,7 +67,7 @@ char	**envp;
 	me = argv[0];
 	outfp = stdout; 
 	dbgfp = stderr; 
-	while ((option = getopt(argc, argv, "a:b:dD:ls:o:z?")) != EOF)
+	while ((option = getopt(argc, argv, "a:b:dD:l:s:o:z?")) != EOF)
 		switch (option)
 			{
 			case 'a' :					/* address file specified	*/
