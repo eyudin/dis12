@@ -1,5 +1,7 @@
-#include <stdio.h>
 #include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "dis12.h"
 #include "dis12tbl.h"
 

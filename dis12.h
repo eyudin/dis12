@@ -89,4 +89,9 @@ extern OpTblEnt pag2[];
 #define TRAP	(1 << 4)		/* trap needs trap number	*/
 #define LOAD	(1 << 5)		/* load immediate			*/
 
+extern int		_errmsg(int, char *, ... );
+extern void		add_class(char, int, int);
+extern int		addlabel(int);
+extern u_char	get_byte(void);
+
 #endif

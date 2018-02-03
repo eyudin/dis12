@@ -3,13 +3,17 @@
  *  return a pointer to the buffer
  */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <ctype.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <ctype.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include "dis12.h"
 
 #define STATIC	static
 u_int	first = 65536, last = 0;

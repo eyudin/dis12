@@ -2,11 +2,15 @@
  *  6812 disassembler
  */
 
-#include <stdio.h>
-#include <getopt.h>
-#include <errno.h>
 #include <sys/types.h>
- 
+#include <ctype.h>
+#include <errno.h>
+#include <getopt.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "dis12.h" 
 //#include "dis12tbl.h" 
 
@@ -40,7 +44,6 @@ void	read_class(char *);
 void	add_class(char, int, int);
 int		find_type(int);
 void	load_syms(char *);
-int		addlabel(int);
 int		insert_sym(char *, int);
 void	dolabel(int);
 int		findlabel(int);
@@ -48,14 +51,13 @@ void	cleansym(void);
 void	doorg(int);
 void	epilog(void);
 char	*strsav(char *);
-u_char	get_byte(void);
 int		htoi(char *);
-/*int		_errmsg(int, char *, ... );		/* doesn't like this	*/
+int		_errmsg(int, char *, ... );
 void	usage();
  
 extern u_char	*load_file(char *name);
 
-main(argc, argv, envp)
+int 	main(argc, argv, envp)
 int		argc;
 char	**argv;
 char	**envp;
@@ -608,12 +610,14 @@ int				htoi(char *s)
  * generic error message handler
  */
 
-int		_errmsg(code, string, arg1, arg2, arg3, arg4)
-int		code;
-char	*string;
-int		arg1, arg2, arg3, arg4;
+int		_errmsg(int code, char *string, ...)
 	{
-	fprintf(stderr, string, arg1, arg2, arg3, arg4);
+	va_list	ap;
+
+	va_start(ap, string);
+	vfprintf(stderr, string, ap);
+	va_end(ap);
+
 	return (code);
 	}
 
