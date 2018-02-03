@@ -1,0 +1,115 @@
+
+15 Nov 2001
+
+dis12 - a disassebler for the Motorola 6812 family.
+
+dis12 was written for the 68HC812A4 microprocessor. It surely works on
+others of the family (ie MC9S12, 68HC912), but any new opcodes
+introduced by them would not likely decode properly. I don't have
+manuals for the other members, but will make the changes to dis12 if it
+proves necessary.
+
+dis12 is not as clever as the some disassemblers that automatically sort
+out code and data. You have to tell it which is what if you want it to
+care. This is done with a parameter file. The input format for dis16 is
+eiter a binary memory image file or an S-Record file.  dis12 will figure
+out which it is.  In addition, you can specify a symbol file that
+relates addresses to symbols and dis12 will use these in the disassembly
+listing. Rather than have different modes for test listings and
+assembler source, the output format is assembler source with the object
+as comments on the right hand side of the page. For example,
+
+         ldaa  #'0'                    ;$FDA4 $86 $30
+
+dis12 makes two passes over the input file.  The first pass identifies
+addresses that are labels and builds a symbol table. The second pass
+then produces the disassembly using the symbol table to identify labels
+for branch targets, targets of immediate loads, etc. In addition, an
+initial extra pass is made over an S-Record file to identify the address
+range(s) involved.
+
+The control file is composed of lines of the form:
+  code start_address end_address
+The possible codes are:
+	a - address words (like in tables). For instance, a C compiler
+	    will generate an array of addresses of strings.
+	b - data bytes (like in tables)
+	c - code area
+	t - text area (strings)
+	x - ignored (read but skipped) dis12 knows what areas are
+	    skipped in the caese of S-Record files, but not binary
+	    image file. For those, dis12 must be told what bytes to
+	    ignore.
+	# - comments out the line, causing it to be ignored
+
+The creation of the control file is a bit like black magic. There aren't
+any rules. You have to look at a hex dump and pick out the string and
+data areas and/or run dis12, examine the output, add strange areas to
+the control file, and repeat.
+
+The symbol file is composed of lines of the form:
+   name   hex_address
+There can be any amount of white space (blank or tab) between the two,
+but 'hex_address' must be composed of either digits or the letters
+'a' to 'f' in either case. For example:
+
+SetUserVector A000
+linptr        0A04
+
+dis12 tries hard to make an intelligible disassembly, but most of the
+cleverness can be disabled on the command line. dis12 assumes that all
+direct and extended access are to use labels rather than absolute
+numbers, which is quite reasonable. In many programs, most immediate 8
+bit references with values in the range 32 to 127 are dealing with ASCII
+characters, as are some 16 bit immediate references produced by
+compilers. The first is still pretty reasonable; the second less so.
+Depending on the source of the program (compiler or hand assembly),
+often 16 bit immediate loads reference objects in the code or data
+space, but this is not true of, say compares or mathematical operations.
+It is fairly easy to know where the code space is, but less so the data
+space, so dis12 only assumes the immediate loads in the code space are
+labels.  Targets of flow chaning opcodes (subroutine calls, jumps,
+branches, etc) are uses as labels. So to are the targets of direct and
+extended memory access and 16 bit indexed and indirect indexed accesses.
+The -b option controls this behavior of dis12, by allowing one to
+selectively enable or disable each of these features.
+
+The current syntax and options are:
+dis12 [options] file
+   -a file     address classification file
+   -b [+-]hhhh set the behavior of the disassembler
+               'hhhh' is a bit mask composed of:
+    0x0001     force 8 bit immed in 32..126 to char
+    0x0002     force long immediate to symbol
+    0x0004     force 9 bit pc indexed to symbol
+    0x0008     force other 9 bit indexed to symbol
+    0x0010     force 16 bit pc indexed to symbol
+    0x0020     force other 16 bit indexed to symbol
+    0x0040     force 16 bit pc indirect indexed to symbol
+    0x0080     force other 16 bit indirect indexed to symbol
+               a '-' prefix removes a bit and
+               a '+' prefix adds a bit and
+               no prefix sets the mask to the value
+               the default is 0x0077
+   -d          turn debug on
+   -D hhhh     set debug to 'hhhh'
+   -l file     write listing to 'file'
+   -o hhhh     set org to 'hhhh'
+   -s file     symbol mapping file
+
+dis12 was written on linux and, as such, should run on any other unix
+like system. However, I have not used any esoteric features, so it
+should compile and run on anything that has an ANSI C compiler. One
+possible exception would be getopt(). I have included source for a
+reasonable version.
+
+Finally, I am not releasing this under any particular freeware license,
+but it _is_ free, and I expect it to remain so.
+
+Have fun!
+
+Carl Kreider
+22297 CR 28
+Goshen, IN 46526
+ckreider@doctordesign.com, ckreider@acm.org, ckreider@gte.net
+
