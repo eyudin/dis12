@@ -1,3 +1,6 @@
+#ifndef DIS12TBL_HEADER
+#define DIS12TBL_HEADER
+
 /* 
  *	6812 disassembler string tables 
  */ 
@@ -552,3 +555,5 @@ OpTblEnt pag2[] = {
 /* fe */	{INH,	TRAP,			0,	"trap"},
 /* ff */	{INH,	TRAP,			0,	"trap"}
 			}; 
+
+#endif

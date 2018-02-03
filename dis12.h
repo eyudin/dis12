@@ -1,3 +1,6 @@
+#ifndef DIS12_HEADER
+#define DIS12_HEADER
+
 /*
  * behavior control stuff
  */
@@ -86,3 +89,4 @@ extern OpTblEnt pag2[];
 #define TRAP	(1 << 4)		/* trap needs trap number	*/
 #define LOAD	(1 << 5)		/* load immediate			*/
 
+#endif
